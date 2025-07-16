@@ -1,0 +1,159 @@
+{% extends "base/base.html" %}
+{% block title %}Parra's Devs{% endblock title %}
+
+{% block content %}
+
+<style>
+    .top-bar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+
+    .create-button {
+        background-color: #28a745;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.2s;
+    }
+
+    .create-button:hover {
+        background-color: #218838;
+    }
+
+    .filter-buttons form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-bottom: 20px;
+    }
+
+    .filter-buttons button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .filter-buttons button:hover {
+        background-color: #0056b3;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background-color: #797979;
+    }
+
+    .btn-sm {
+        padding: 4px 10px;
+        font-size: 0.85rem;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-right: 6px;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: black;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-info:hover {
+        background-color: #138496;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+</style>
+
+<div class="top-bar">
+    <a href="{% url 'create' %}" class="create-button">Crear</a>
+</div>
+
+<div class="filter-buttons">
+    <form method="get">
+        <button name="filter" value="ids">ID's</button>
+        <button name="filter" value="ids_titles">ID's y Titles</button>
+        <button name="filter" value="ids_users">ID's y UserId</button>
+        <button name="filter" value="ids_titles_unresolved">ID's y Titles (Sin resolver)</button>
+        <button name="filter" value="ids_users_unresolved">ID's y UserId (Sin resolver)</button>
+        <button name="filter" value="ids_titles_resolved">ID's y Titles (Resueltos)</button>
+        <button name="filter" value="ids_users_resolved">ID's y UserId (Resueltos)</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            {% if not filter_type or filter_type == "ids" or "ids" in filter_type %}
+                <th>ID</th>
+            {% endif %}
+            {% if filter_type and "titles" in filter_type %}
+                <th>Title</th>
+            {% endif %}
+            {% if filter_type and "users" in filter_type %}
+                <th>UserId</th>
+            {% endif %}
+            {% if not filter_type or "unresolved" in filter_type or "resolved" in filter_type %}
+                <th>Resuelto</th>
+            {% endif %}
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for todo in todos %}
+        <tr>
+            {% if not filter_type or filter_type == "ids" or "ids" in filter_type %}
+                <td>{{ todo.id }}</td>
+            {% endif %}
+            {% if filter_type and "titles" in filter_type %}
+                <td>{{ todo.title }}</td>
+            {% endif %}
+            {% if filter_type and "users" in filter_type %}
+                <td>{{ todo.userId }}</td>
+            {% endif %}
+            {% if not filter_type or "unresolved" in filter_type or "resolved" in filter_type %}
+                <td>{{ todo.completed }}</td>
+            {% endif %}
+            <td>
+                <a href="{% url 'detail' todo.id %}" class="btn btn-sm btn-info">Ver</a>
+                <a href="{% url 'update' todo.id %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'delete' todo.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

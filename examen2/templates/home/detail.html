@@ -1,0 +1,13 @@
+{% extends "base/base.html" %}
+{% block title %}Detalle Tarea{% endblock %}
+
+{% block content %}
+<h2>Detalles de la tarea</h2>
+<ul>
+    <li><strong>ID:</strong> {{ object.id }}</li>
+    <li><strong>Título:</strong> {{ object.title }}</li>
+    <li><strong>User ID:</strong> {{ object.userId }}</li>
+    <li><strong>Completado:</strong> {{ object.completed }}</li>
+</ul>
+<a href="{% url 'home' %}" class="btn btn-secondary">Volver</a>
+{% endblock %}
